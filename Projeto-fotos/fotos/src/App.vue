@@ -3,7 +3,11 @@
 
     <div class="corpo">
 
-        <router-view></router-view>
+        <meu-menu :rotas="routes" />
+
+        <transition name="pagina"> <!-- Transição entre as página -->
+          <router-view></router-view>
+        </transition>
 
     </div>
 
@@ -11,7 +15,22 @@
 
 <script>
 
+import { routes } from './routes';
+import Menu from './components/shared/menu/Menu.vue';
+
 export default {
+
+  components: {
+
+    'meu-menu' : Menu
+  },
+
+  data() {
+
+    return {
+      routes
+    }
+  }
 
 }
 </script>
@@ -23,6 +42,15 @@ export default {
     width: 96%;
     margin: 0 auto;
 
+  }
+
+  .pagina-enter, .pagina-leave-active{
+      opacity: 0;
+
+  }
+
+  .pagina-enter-active, .pagina-leave-active{
+      transition: opacity 1s;
   }
 
 </style>

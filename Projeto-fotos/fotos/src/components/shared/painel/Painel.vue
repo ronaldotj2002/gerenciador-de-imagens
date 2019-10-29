@@ -6,7 +6,7 @@
 
         <transition name="painel-fade">
 
-            <div class="painel-titulo" v-show="visivel">
+            <div class="painel-conteudo" v-show="visivel">
 
                 <slot></slot>
 
@@ -66,6 +66,10 @@
 
   .painel-fade-enter-active, .painel-fade-leave-active{
       transition: opacity 1s;
+  }
+
+  .painel-conteudo{
+      overflow: hidden;
   }
  
 </style>

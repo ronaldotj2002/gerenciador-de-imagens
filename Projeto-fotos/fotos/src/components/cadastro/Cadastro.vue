@@ -2,7 +2,7 @@
 
   <div>
     <h1 class="centralizado">Cadastro</h1>
-    <h2 class="centralizado">{{ foto.titulo }}</h2>
+    <p class="centralizado">{{ mensagem }}</p>
 
     <form @submit.prevent="grava()">
 
@@ -24,7 +24,7 @@
 
       <div class="centralizado">
         <meu-botao rotulo="GRAVAR" tipo="submit" />
-        <router-link to="/">
+        <router-link :to="{ name: 'home'}">
           <meu-botao rotulo="VOLTAR" tipo="button" />
         </router-link>
       </div>
@@ -39,6 +39,8 @@
 import ImagemResponsiva from "../shared/imagem-responsiva/ImagemResponsiva.vue";
 import Botao from "../shared/botao/Botao.vue";
 import Foto from '../../domain/foto/Foto'; // importando a classe foto
+import FotoService from '../../domain/foto/fotoService'
+
 
 export default {
   components: {
@@ -48,16 +50,26 @@ export default {
   data() {
       return {
 
-          foto: new Foto()
+          foto: new Foto(),
+          mensagem: ''
         }
     },
 
     methods: {
+
         grava() {
 
-            this.$http.post('http://localhost:3000/v1/fotos', this.foto)
-            .then(() => this.foto = new Foto(), err => console.log(err));
+            this.service
+            .cadastra(this.foto)
+            .then(() => this.foto = new Foto(), this.mensagem = 'Foto gravada com sucesso!',
+            err => console.log(err));
         }
+    },
+
+    created() {
+      
+      this.service = new FotoService(this.$resource);
+      
     }
 }
 </script>

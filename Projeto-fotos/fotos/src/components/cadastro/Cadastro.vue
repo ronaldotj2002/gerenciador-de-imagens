@@ -2,24 +2,34 @@
 
   <div>
     <h1 class="centralizado">Cadastro</h1>
+
+    <h2 v-if="foto._id" class="centralizado"> Alterando</h2>
+    <h2 v-else class="centralizado">Incluindo</h2>
+    
+    <br>
     <p class="centralizado">{{ mensagem }}</p>
+
+
 
     <form @submit.prevent="grava()">
 
       <div class="controle">
         <label for="titulo">TÍTULO</label>
-        <input id="titulo" autocomplete="off" v-model.lazy="foto.titulo"/>
+        <input data-vv-as="título" name="titulo" v-validate data-vv-rules="required|min:3|max:30" id="titulo" autocomplete="off" v-model="foto.titulo"/>
+        <span class="erro" v-show="errors.has('titulo')">{{ errors.first('titulo') }}</span>
       </div>
 
       <div class="controle">
         <label for="url">URL</label>
-        <input id="url" autocomplete="off" v-model.lazy="foto.url"/>
+        <input name="url" v-validate data-vv-rules="required" id="url" autocomplete="off" v-model="foto.url"/>
+         <span class="erro" v-show="errors.has('url')">{{ errors.first('url') }}</span>
         <imagem-responsiva v-show="foto.url" :url="foto.url" :titulo="foto.titulo" />
       </div>
 
       <div class="controle">
         <label for="descricao">DESCRIÇÃO</label>
-        <textarea id="descricao" autocomplete="off" v-model="foto.descricao"></textarea>
+        <textarea name="descricao" v-validate data-vv-rules="required" id="descricao" autocomplete="off" v-model="foto.descricao"></textarea>
+        <span class="erro" v-show="errors.has('descricao')">Descrição obrigatória!</span>
       </div>
 
       <div class="centralizado">
@@ -50,7 +60,8 @@ export default {
   data() {
       return {
 
-          foto: new Foto(),
+          foto: new Foto(),          
+          id: this.$route.params.id,
           mensagem: ''
         }
     },
@@ -59,16 +70,34 @@ export default {
 
         grava() {
 
-            this.service
-            .cadastra(this.foto)
-            .then(() => this.foto = new Foto(), this.mensagem = 'Foto gravada com sucesso!',
-            err => console.log(err));
+            this.$validator // é do vee-validate
+            .validateAll() // promisse
+            .then(success => {
+
+              if(success) {
+
+                this.service
+                .cadastra(this.foto)
+                .then(() => {
+                  if(this.id) this.$router.push({ name: 'home'});
+                   this.foto = new Foto() }, this.mensagem = 'Foto gravada com sucesso!',
+                      err => console.log(err));
+              }
+
+            });
+
         }
     },
 
     created() {
       
       this.service = new FotoService(this.$resource);
+
+      if (this.id) {
+        this.service
+        .busca(this.id)
+        .then(foto => this.foto = foto);
+      }     
       
     }
 }
@@ -100,5 +129,9 @@ export default {
 .centralizado {
   text-align: center;
   
+}
+.erro {
+
+  color:darkred;
 }
 </style>

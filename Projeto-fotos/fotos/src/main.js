@@ -9,6 +9,8 @@ import './directives/Transform'; //carregando a diretiva no global vue
 import VeeValidate from 'vee-validate';
 import msg from  './pt_BR';
 
+import 'bootstrap/dist/css/bootstrap.css';
+
 //registrando o módulo no global view objeto
 Vue.use(VueRouter);
 
@@ -19,6 +21,7 @@ const router = new VueRouter({
 
 Vue.use(VueResource);
 Vue.http.options.root ='http://localhost:3000'
+// Vue.http.options.root = process.env.API_URL ? process.env.API_URL : 'http://localhost:3000';
 
 Vue.use(VeeValidate, {
 

@@ -1,4 +1,5 @@
 import Cadastro from './components/cadastro/Cadastro.vue';
+// const Cadastro = () => System.import('./components/cadastro/Cadastro.vue') // Adicionando um lazy loading no componente cadastro
 import Home from './components/home/Home.vue';
 
 export const routes = [

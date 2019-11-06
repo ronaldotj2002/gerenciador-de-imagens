@@ -1,6 +1,6 @@
 <template>
-    <nav>
-        <ul>
+    <nav  class="navbar navbar-default">
+        <ul class="nav navbar-nav">
 
             <li v-for="rota in rotas" :key="rota.id">
 
@@ -29,5 +29,8 @@ export default {
 </script>
 
 <style>
+li {
+    list-style: none;
+}
 
 </style>

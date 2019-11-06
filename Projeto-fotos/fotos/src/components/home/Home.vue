@@ -1,26 +1,41 @@
 
 <template>
 
-    <div>
+    <div class="row">
 
         <h1 class="centralizado">{{ titulo }}</h1>
 
         <p  v-show="mensagem" class="centralizado">{{ mensagem }}</p>
-
-        <input type="search" class="filtro" @input="filtro = $event.target.value" placeholder="Filtrar pelo título da imagem" />
-
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="input-group">
+            <input type="text" class="form-control" @input="filtro = $event.target.value" placeholder="Filtrar pelo título da imagem">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Go!</button>
+            </span>
+          </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+      </div>
+    
         <ul class="lista-fotos">
 
             <li class="lista-fotos-item" v-for="foto of fotosComFiltro" :key="foto.id">   
 
-                <meu-painel :titulo="foto.titulo">
+                <meu-painel class="col-md-3">
 
-                    <imagem-responsiva 
-                    :url="foto.url" 
-                    :titulo="foto.titulo" 
-                    v-meu-transform:scale.animate="1.2"/>
+                   <div class="thumbnail">
+                      <imagem-responsiva 
+                      :url="foto.url" 
+                      :titulo="foto.titulo" 
+                      v-meu-transform:scale.animate="1.2"/>
 
-                    <router-link :to="{name: 'altera', params: { id: foto._id} }">
+                      <div class="caption">
+                          
+                          <h3>{{ foto.titulo }}</h3>
+                          
+                          <p>{{ foto.descricao }}</p>
+
+                          <router-link :to="{name: 'altera', params: { id: foto._id} }">
                       <meu-botao tipo="button" rotulo="Alterar" />
                     </router-link>
                     
@@ -31,6 +46,10 @@
                       :confirmacao="true"
                       estilo="perigo"
                     />
+
+                      </div>
+                   </div>
+
                 </meu-painel>
                     
             </li>
@@ -120,7 +139,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped>
 
   .centralizado{
     text-align: center;
@@ -129,11 +148,6 @@ export default {
 
   .lista-fotos{
     list-style: none;
-
-  }
-
-  .lista-fotos .lista-fotos-item{
-    display: inline-block;
 
   }
   
